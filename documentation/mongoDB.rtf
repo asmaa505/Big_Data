@@ -27,7 +27,7 @@ MONGO DB\b0\i0\fs44\par
 
 \pard\ltrpar\li720\sa200\sl276\slmult1\cf4 db.section1.insertOne(\{\par
   name : 'asmaa',\par
-  age    :  '21',\par
+  age    :  21,\par
   major :  'IS'\par
 \})\cf3\par
 
@@ -62,11 +62,11 @@ MONGO DB\b0\i0\fs44\par
 \tab\cf4 ex: db.section1.find( \{ name : 'mirit' \} )\par
 \cf3 --------------------------------------------------------------------------------\par
 \cf2 9. limit the collection to just (2)\par
-\tab\cf3 db.collection.find().limit()\par
+\tab\cf3 db.collection.find().limit( number of documents)\par
 \tab\cf4 ex: db.section1.find().limit(2)\cf3\par
 --------------------------------------------------------------------------------\par
 \cf2 10. skip collection:\par
-\tab\cf3 db.collection.find().skip( number of the collections )\par
+\tab\cf3 db.collection.find().skip( number of the documents )\par
 \tab\cf4 ex: db.section1.find().skip(2)\par
 \cf3 --------------------------------------------------------------------------------\par
 \cf1\ul Query Operators\par
@@ -20601,8 +20601,13 @@ ffffffffffffffffff0000040000002701ffff030000000000
 \tab\})\par
 \cf3 --------------------------------------------------------------------------------\par
 \cf2 20. nor\par
-\tab\cf3 db.sollection.find(\{$nor :\{condition1\} , \tab\{condition2\} .... \})\par
-\cf4\tab db.section1.find(\{\par
+\cf3\tab db.collection.find(\{\par
+  \tab $nor: [\par
+    \tab\{ condition1 \},\par
+   \tab  \{ condition2 \}\par
+\tab\tab ]\par
+\tab\})\par
+\cf4\tab ex: db.section1.find(\{\par
   \tab $nor : [\par
     \tab\tab\{name : \{$eq : 'asmaa'\}\},\par
     \tab\tab\{age  : \{$gt : 20\}\}\par
@@ -20620,13 +20625,13 @@ ffffffffffffffffff0000040000002701ffff030000000000
 \cf5\ulnone note: increase operators:\par
 set , inc , mul\cf1\ul\par
 \cf2\ulnone 21. to update a sigle document:\par
-\tab\cf3 db.collection.updateOne( \{ condition == filter\} , \par
+\tab\cf3 db.collection.updateOne( \{ condition \} , \par
 \tab $update_operator : \{ update \} )\par
 \tab\cf4 ex: \tab db.section1.updateOne( \{name : 'angham'\},\par
 \tab\tab\{ $set : \{ age : 21 \} \})\par
 \cf3 --------------------------------------------------------------------------------\cf2\par
 22. update multiple documents:\par
-\tab\cf3 db.collection.updateOne( \{ condition == filter\} , \par
+\tab\cf3 db.collection.updateMany( \{ condition == filter\} , \par
 \tab $set : \{ update \} )\par
 \cf4\tab ex:   db.section1.updateMany(\{age : \{$gt : 20\}\},\par
          \tab\{$set : \{major : 'AI'\}\})\par
@@ -20644,11 +20649,11 @@ set , inc , mul\cf1\ul\par
 \cf3 --------------------------------------------------------------------------------\par
 \cf1\ul Delete Operation: \par
 \cf2\ulnone 24. to delete a single document:\par
-\cf3\tab db.collection.beleteOne( \{condition \} )\par
+\cf3\tab db.collection.deleteOne( \{condition \} )\par
 \tab\cf4 ex: db.section1.deleteOne( \{name : 'asmaa'\} )\par
 \cf3 --------------------------------------------------------------------------------\par
 \cf2 25. to delete multiple documents:\par
-\cf3\tab db.collection.beleteMany( \{condition \} )\par
+\cf3\tab db.collection.deleteMany( \{condition \} )\par
 \tab\cf4 ex: db.section1.deleteMany( \{name : 'mirit'\} )\par
 \cf3 --------------------------------------------------------------------------------\par
 \cf2 26. drop a collection:\par
@@ -20659,13 +20664,13 @@ set , inc , mul\cf1\ul\par
 \tab\cf3 use database_name\cf2\par
 \tab\cf3 db.dropDatabase()\par
 \cf4\tab ex: use students\par
-\tab       db.drop.Database()\par
+\tab       db.dropDatabase()\par
 \cf3 --------------------------------------------------------------------------------\par
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------\par
 \cf1\ul\b Aggregate piplines:\ulnone  \b0\par
 \cf2 28. match:\par
-\tab\cf3 db.collection.aggregate([ condition ])\par
-\tab\cf4 ex: db.employee.aggregate( \{salary : \{$gt:1000\}\})\par
+\tab\cf3 db.collection.aggregate([ \{$match : condition\} ])\par
+\tab\cf4 ex:   db.employee.aggregate( [\{$match : \{salary : \tab\tab\tab\tab\{$gt:1000\} \}])\par
 \cf3 --------------------------------------------------------------------------------\par
 \cf2 29. group:\par
 \tab\cf3 db.collection.aggregate([ \line\tab\{ $group : \{ _id : \{$attribute\} \},\par
@@ -20683,7 +20688,7 @@ set , inc , mul\cf1\ul\par
   \tab\tab\{$project : \{ LAST_NAME : 1 , _id : 0\}\} ])\cf3\par
 --------------------------------------------------------------------------------\par
 \cf2 31. sort:\par
-\cf3\tab db.collection.aggregate([ \{$sort : \{salary : -1 \} ])\par
+\cf3\tab db.collection.aggregate([ \{$sort : \{attribute : -1 \} \}])\par
 \tab\cf6 note:    1   =>  Ascending\par
 \tab\tab      -1  => Descending\par
 \tab\cf4 ex: \tab db.employee.aggregate([\par
@@ -20697,7 +20702,7 @@ set , inc , mul\cf1\ul\par
 \tab\cf4 ex:   db.employee.updateMany( \{\} , \{$set : \{hobbies : \tab\tab\tab ['dance' , 'reading' , 'sport']\}\} )\par
 \tab\tab db.employee.aggregate([\{$unwind : '$hobbies'\}])\cf2\par
 \cf3 --------------------------------------------------------------------------------\cf2 33. addfields & set:\par
-\tab\cf3 db.collection.aggregate([\line\tab\{$addFields : \{new_attribute : \{arthmatic operation\}])\par
+\tab\cf3 db.collection.aggregate([\line\tab\{$addFields : \{new_attribute : \{arthmatic \tab operation\}\}\} ])\par
 \tab\cf4 ex: \tab db.employee.aggregate([\par
   \tab\tab\{$addFields : \{tax : \{$multiply : ['$SALARY' ,0.1]\}\}\}\par
 \tab\tab ])\par
@@ -20709,7 +20714,7 @@ set , inc , mul\cf1\ul\par
 \tab\cf3 db.collection1.aggregate([\line\tab\{$lookup : \{\par
 \tab from : collection2,\par
 \tab localField : "primary key name",\par
-\tab forgienField : "foriegn key name",\par
+\tab foreignField: "foriegn key name",\par
 \tab as : "attribute name" \} \}])\par
 \tab\cf4 ex:    db.employee.aggregate([\par
 \tab\tab  \{$lookup : \{\par
@@ -20720,13 +20725,13 @@ set , inc , mul\cf1\ul\par
   \tab\tab\tab\tab\}\}\par
 \tab\tab ])\cf3\par
 --------------------------------------------------------------------------------\cf2 35. merge:\par
-\cf3\tab db.collection.aggregate([\line\tab\{$merge : \{into : "attribute name", whenMatchad : \tab "merge",\par
+\cf3\tab db.collection.aggregate([\line\tab\{$merge : \{into : "attribute name", whenMatched : \tab "merge",\par
 \tab whenNotMatched : "insert" \} \} ])\par
 \tab\cf4 ex:   db.employee.aggregate([\par
   \tab\tab\{$merge : \{into : "employee_backup" , \tab\tab\tab\tab\tab whenMatched : "merge" , whenNotMatched : \tab\tab\tab "insert"\}\}\par
 \tab\tab ])\cf3\par
 --------------------------------------------------------------------------------\cf2 36. sample:\par
-\tab\cf3 db.collection.aggregate([\{$sample : \{size : number \} ])\tab\par
+\tab\cf3 db.collection.aggregate([\{$sample : \{size : \tab number \} \}])\tab\par
 \tab\cf4 ex:   db.employee.aggregate([\par
   \tab\tab\{$sample : \{size : 2\}\} ])\cf2\tab\par
 \cf3 --------------------------------------------------------------------------------\par
